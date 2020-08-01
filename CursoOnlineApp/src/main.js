@@ -22,13 +22,13 @@ Vue.use(Vuetify)
 
 // Initialize Firebase
 var config = {
-  apiKey: "AIzaSyBGd-p4l_PLz0MifncuyUjO9VG9afF-1GQ",
-  authDomain: "cursoonlie.firebaseapp.com",
-  databaseURL: "https://cursoonlie.firebaseio.com",
-  projectId: "cursoonlie",
-  storageBucket: "cursoonlie.appspot.com",
-  messagingSenderId: "878472732578",
-  appId: "1:878472732578:web:c35d9f56dc5455c9fb5cfb"
+  apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  authDomain: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  databaseURL: "hxxxxxxxxxxxxxxxxxxxxxxxx,
+  projectId: "cxxxxxxxxxxxxxxxxxxx",
+  storageBucket: "xxxxxxxxxxxxxxxxxxxxxxxx",
+  messagingSenderId: "xxxxxxxxxxxxxxxxxxx",
+  appId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 };
 firebase.initializeApp(config);
 
