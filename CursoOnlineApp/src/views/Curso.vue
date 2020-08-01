@@ -1,7 +1,7 @@
 <template>
-  <v-container class="eee">
-    <v-row>
-      <v-col cols="10">
+  <v-container fluid>
+    <v-row v-resize="onResize">
+      <v-col cols="12" md="12">
         <div style="margin-left:50px">
           <div class="display-2">
             Cursos
@@ -19,33 +19,64 @@
           </div>
         </div>
       </v-col>
-      <v-col cols="10">
-        <v-sheet>
-          <v-slide-group
-            v-model="model"
-            class=""
-            center-active
-            show-arrows
-            v-if="!isLoading"
+    </v-row>
+    <v-row>
+      <v-col cols="12" v-if="!isMobile" md="12">
+        <v-slide-group
+          v-if="isLoading"
+          v-model="model"
+          class="pa-4"
+          center-active
+        >
+          <v-slide-item
+            v-for="n in 10"
+            :key="n"
+            v-slot:default="{ active, toggle }"
           >
-            <v-slide-item
-              v-for="(item, i) in cards"
-              :key="i"
-              v-slot:default="{ active, toggle }"
+            <v-skeleton-loader
+              :color="active ? 'primary' : 'grey lighten-1'"
+              class="ma-10"
+              heigth="50"
+              width="300"
+              max-width="300"
+              type="card, paragraph, actions"
+              v-bind:active="active"
+              v-on:click.native="toggle"
+              elevation="24"
+            ></v-skeleton-loader>
+          </v-slide-item>
+        </v-slide-group>
+
+        <v-slide-group
+          v-model="model"
+          class="pa-4"
+          center-active
+          style="margin-left: 0px; margin-right:0px"
+          v-if="!isLoading"
+          show-arrows
+        >
+          <v-slide-item
+            v-for="(item, i) in cards"
+            :key="i"
+            v-slot:default="{ active, toggle }"
+          >
+            <curso
+              :key="cursoComponent"
+              v-bind:cursoItem="item"
+              v-bind:active="active"
+              v-on:click.native="toggle"
+              ref="curso"
             >
-              <div v-show="!isLoading">
-                <curso
-                  :key="cursoComponent"
-                  v-bind:cursoItem="item"
-                  v-bind:active="active"
-                  v-on:click.native="toggle"
-                  ref="curso"
-                >
-                </curso>
-              </div>
-            </v-slide-item>
-          </v-slide-group>
-        </v-sheet>
+            </curso>
+          </v-slide-item>
+        </v-slide-group>
+      </v-col>
+      <v-col v-if="isMobile">
+        <v-carousel hide-delimiters>
+          <v-carousel-item v-for="(item, i) in cards" :key="i">
+            <curso :key="cursoComponent" v-bind:cursoItem="item" ref="curso" />
+          </v-carousel-item>
+        </v-carousel>
       </v-col>
     </v-row>
   </v-container>
@@ -62,21 +93,26 @@ export default {
   },
   data: () => ({
     tokenId: null,
-    isLoading: false,
+    isLoading: true,
     model: null,
     cards: [],
     cursoComponent: null,
+    isMobile: false,
   }),
   mounted() {
     this.fetch();
+    this.onResize();
   },
   created() {},
   methods: {
+    onResize() {
+      this.isMobile = window.innerWidth < 600;
+    },
     async fetch() {
-      this.isLoading = true;
+      // this.isLoading = true;
       const { data } = await CursoRepository.get();
-      this.isLoading = false;
       this.cards = data;
+      this.isLoading = false;
     },
   },
 };

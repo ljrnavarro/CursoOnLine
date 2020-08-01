@@ -16,17 +16,20 @@
                     outlined
                     label="Email"
                     name="email"
+                    autocomplete="off"
                     prepend-icon="person"
                     type="text"
                   ></v-text-field>
                   <v-text-field
                     v-model="senha"
-                    label="senha"
+                    label="Senha"
                     name="senha"
                     outlined
                     prepend-icon="lock"
+                    placeholder="Senha"
                     type="password"
-                  ></v-text-field>
+                  >
+                  </v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -34,8 +37,8 @@
                 <v-btn
                   color="secondary"
                   @click="newAcount"
-                  :loading="loadingLogin"
-                  :disabled="loadingLogin"
+                  :loading="loadingNovaConta"
+                  :disabled="loadingNovaConta"
                   to="/registrar"
                 >
                   Crie uma Conta</v-btn
@@ -82,17 +85,17 @@ export default {
     source: String,
   },
   mounted() {
-    // this.autocomplete.addListener("place_changed", () => {
-    //    var place = self.autocomplete.getPlace();
-    //    this.address = place.name; // update the value
-    //  });
+     this.$nextTick(function () {
+      console.log("senha", this.senha);
+      console.log("email", this.email);
+    });
   },
   methods: {
     fetchToken: async function() {
       const currentUser = firebase.auth().currentUser;
       if (currentUser) {
         const tokenId2 = await firebase.auth().currentUser.getIdToken(true);
-        console.log("login2")
+        console.log("login2");
         this.$store.commit("STORE_USER_TOKEN", {
           user: currentUser,
           token: tokenId2,
@@ -107,7 +110,7 @@ export default {
         .then(
           async () => {
             this.loadingLogin = false;
-            console.log("login1")
+            console.log("login1");
             await this.fetchToken();
             this.$swal({
               icon: "success",
@@ -145,7 +148,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .login {
   margin-top: 40px;
 }

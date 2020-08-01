@@ -7,6 +7,7 @@ using CursoOnline.Domain.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace CursoOnline.Api.Controllers
 {
@@ -48,6 +49,7 @@ namespace CursoOnline.Api.Controllers
             [FromServices]ICursoRepository repository
         )
         {
+            Thread.Sleep(4000);
             return repository.GetAll();
         }
     }

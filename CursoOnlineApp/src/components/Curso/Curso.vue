@@ -1,14 +1,14 @@
 <template>
   <v-card
     :color="active ? 'primary' : 'grey lighten-1'"
-    class="ma-10"
-    heigth="50"
-    width="300"
+    class="mx-auto"
     elevation="24"
+    style="max-width:auto; max-height:430px; margin-right: 40px !important; margin-left:40px !important"
   >
     <v-img
       class="white--text align-end"
-     
+      max-height="150px"
+      max-width="300px"
       src="../../images/tech.jpg"
     >
       <v-card-title class="titulo">{{ cursoItem.titulo }}</v-card-title>
@@ -16,7 +16,7 @@
 
     <v-card-subtitle class="pb-0">{{cursoItem.nivel}}</v-card-subtitle>
 
-    <v-card-text style="height:150px" class="text--primary text-justify">
+    <v-card-text style="max-height:auto ; max-width:290px" class="text--primary text-justify">
       <div>{{ cursoItem.descricao  | CutText(210, '...') }}</div>
     </v-card-text>
 
