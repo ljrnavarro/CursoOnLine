@@ -10,25 +10,25 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import "vue2-animate/dist/vue2-animate.min.css";
 import Vuex from 'vuex';
 import store  from "./store/store"
-import VueTheMask from "vue-the-mask"
+//import VueTheMask from "vue-the-mask"
 import 'vuetify/dist/vuetify.css';
 
 
 Vue.use(Vuex);
 Vue.use(VueResource);
 Vue.use(VueSweetalert2);
-Vue.use(VueTheMask);
+//Vue.use(VueTheMask ,{ masked : false });
 Vue.use(Vuetify)
 
 // Initialize Firebase
 var config = {
-  apiKey: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  authDomain: "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  databaseURL: "hxxxxxxxxxxxxxxxxxxxxxxxx,
-  projectId: "cxxxxxxxxxxxxxxxxxxx",
-  storageBucket: "xxxxxxxxxxxxxxxxxxxxxxxx",
-  messagingSenderId: "xxxxxxxxxxxxxxxxxxx",
-  appId: "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  apiKey: "AIzaSyBGd-p4l_PLz0MifncuyUjO9VG9afF-1GQ",
+  authDomain: "cursoonlie.firebaseapp.com",
+  databaseURL: "https://cursoonlie.firebaseio.com",
+  projectId: "cursoonlie",
+  storageBucket: "cursoonlie.appspot.com",
+  messagingSenderId: "878472732578",
+  appId: "1:878472732578:web:c35d9f56dc5455c9fb5cfb"
 };
 firebase.initializeApp(config);
 

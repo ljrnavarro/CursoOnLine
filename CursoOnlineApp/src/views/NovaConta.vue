@@ -6,27 +6,27 @@
           <v-col cols="12" sm="8" md="4">
             <v-card class="elevation-5">
               <v-toolbar color="primary" dark flat>
-                <v-toolbar-title>Nova conta</v-toolbar-title>
+                <v-toolbar-title>Cadastro de novo aluno</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
-             <DadosAluno></DadosAluno>
+                <DadosAluno ref="dadosAluno" />
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="secondary" to="/registrar"> Crie uma Conta</v-btn>
+                <v-btn color="error" to="/registrar">Cancelar</v-btn>
                 <v-btn
                   color="primary"
-                  :loading="loadingLogin"
-                  :disabled="loadingLogin"
-                 
+                  @click="registreNewAlunoAcount"
+                  :loading="loadingNovaConta"
+                  :disabled="loadingNovaConta"
                 >
                   <template v-slot:loader>
                     <span class="custom-loader">
                       <v-icon light>cached</v-icon>
                     </span>
                   </template>
-                  Login
+                  Salvar
                 </v-btn>
               </v-card-actions>
             </v-card>
@@ -39,10 +39,9 @@
 
 <script>
 import DadosAluno from "../components/Aluno/DadosAluno";
-//import VueSweetalert2 from "vue-sweetalert2";
-//import "sweetalert2/dist/sweetalert2.min.css";
-//import "vue2-animate/dist/vue2-animate.min.css";
-//import 'sweetalert2/src/SweetAlert/';
+import firebase from "firebase";
+import { RepositoryFactory } from "./../Repositories/RepositoryFactory";
+const AlunoRepository = RepositoryFactory.get("aluno");
 
 export default {
   name: "MeusDados",
@@ -51,8 +50,6 @@ export default {
   },
   data() {
     return {
-      email: "",
-      senha: "",
       loadingLogin: false,
       loadingNovaConta: false,
       loader: null,
@@ -61,13 +58,64 @@ export default {
   props: {
     source: String,
   },
-  mounted() {
-    // this.autocomplete.addListener("place_changed", () => {
-    //    var place = self.autocomplete.getPlace();
-    //    this.address = place.name; // update the value
-    //  });
-  },
+  mounted() {},
   methods: {
+    async registreNewAlunoAcount() {
+      this.loadingNovaConta = true;
+      this.$refs.dadosAluno.validate();
+      var newAlunoAcount = {
+        Nome: this.$refs.dadosAluno.name,
+        Email: this.$refs.dadosAluno.email,
+        CPF: this.$refs.dadosAluno.unmaskedCpf,
+        Nascimento: this.$refs.dadosAluno.dataNascimento,
+        RefUser: "",
+      };
+
+      console.log("newAccount", newAlunoAcount);
+
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(
+          newAlunoAcount.Email,
+          this.$refs.dadosAluno.password
+        )
+        .then(
+          async (user) => {
+            //Cadastrando no banco, após gravar no firebase e capturar o UID
+            await (async () => {
+              newAlunoAcount.RefUser = user.user.uid;
+              await AlunoRepository.create(newAlunoAcount);
+
+              this.$swal({
+                icon: "success",
+                title: "Nova conta cadastrada com Sucesso",
+                text:
+                  "Seja bem vindo(a) " +
+                  newAlunoAcount.Nome +
+                  " você será redirecionado ao login.",
+                showClass: {
+                  popup: "animated fadeInDown",
+                },
+                hideClass: {
+                  popup: "animated fadeOutUp",
+                },
+                onClose: () => {
+                  this.$router.replace("Login");
+                }
+              });
+            })();
+
+            this.loadingNovaConta = false;
+          },
+          (err) => {
+            alert("Aconteceu algo inesperado. " + err.message);
+            this.loadingNovaConta = false;
+          }
+        );
+      //      const { data } = await AlunoRepository.create(newAlunoAcount);
+      //    console.log("newaluno", data)
+      this.isLoading = false;
+    },
   },
 };
 </script>

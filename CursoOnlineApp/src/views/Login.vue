@@ -10,24 +10,26 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
-                <v-form>
+                <v-form class="login">
                   <v-text-field
+                    @animationstart="checkAnimation"
                     v-model="email"
                     outlined
                     label="Email"
                     name="email"
-                    autocomplete="off"
                     prepend-icon="person"
                     type="text"
+                    :placeholder="autofilled ? ' ' : ''"
                   ></v-text-field>
                   <v-text-field
+                   @animationstart="checkAnimation"
                     v-model="senha"
                     label="Senha"
                     name="senha"
                     outlined
                     prepend-icon="lock"
-                    placeholder="Senha"
                     type="password"
+                    :placeholder="autofilled ? ' ' : ''"
                   >
                   </v-text-field>
                 </v-form>
@@ -79,23 +81,27 @@ export default {
       loadingLogin: false,
       loadingNovaConta: false,
       loader: null,
+      autofilled: false
     };
   },
   props: {
     source: String,
   },
   mounted() {
-     this.$nextTick(function () {
-      console.log("senha", this.senha);
-      console.log("email", this.email);
-    });
+
   },
   methods: {
+    checkAnimation(e) {
+      if (e.animationName == "onAutoFillStart") {
+        this.autofilled = true;
+      } else if (e.animationName == "onAutoFillCancel") {
+        this.autofilled = false;
+      }
+    },
     fetchToken: async function() {
       const currentUser = firebase.auth().currentUser;
       if (currentUser) {
         const tokenId2 = await firebase.auth().currentUser.getIdToken(true);
-        console.log("login2");
         this.$store.commit("STORE_USER_TOKEN", {
           user: currentUser,
           token: tokenId2,
@@ -110,7 +116,6 @@ export default {
         .then(
           async () => {
             this.loadingLogin = false;
-            console.log("login1");
             await this.fetchToken();
             this.$swal({
               icon: "success",
@@ -183,40 +188,29 @@ p a {
   animation: loader 1s infinite;
   display: flex;
 }
-@-moz-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.fill-height {
+  padding-bottom: 250px !important;
 }
-@-webkit-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+input:-webkit-autofill {
+  animation-name: onAutoFillStart;
 }
-@-o-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+input:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
 }
-@keyframes loader {
+
+@keyframes onAutoFillStart {
   from {
-    transform: rotate(0);
   }
   to {
-    transform: rotate(360deg);
   }
 }
 
-.fill-height {
-  padding-bottom: 250px !important;
+@keyframes onAutoFillCancel {
+  from {
+  }
+  to {
+  }
 }
 </style>

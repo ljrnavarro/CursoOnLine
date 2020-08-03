@@ -14,10 +14,10 @@
       <v-card-title class="titulo">{{ cursoItem.titulo }}</v-card-title>
     </v-img>
 
-    <v-card-subtitle class="pb-0">{{cursoItem.nivel}}</v-card-subtitle>
+    <v-card-subtitle style="font-weight: bold">{{cursoItem.nivel}}</v-card-subtitle>
 
     <v-card-text style="max-height:auto ; max-width:290px" class="text--primary text-justify">
-      <div>{{ cursoItem.descricao  | CutText(210, '...') }}</div>
+      <div>{{ cursoItem.descricao  | CutText(200, '...') }}</div>
     </v-card-text>
 
     <v-card-actions>

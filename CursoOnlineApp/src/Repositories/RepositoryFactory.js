@@ -1,9 +1,11 @@
 import PostsRepository from "./PostRepository";
 import CursoRepository from "./CursoRepository";
+import AlunoRepository from "./AlunoRepository";
 
 const repositories = {
   posts: PostsRepository,
-  curso: CursoRepository
+  curso: CursoRepository,
+  aluno: AlunoRepository
   // other repositories ...
 };
 

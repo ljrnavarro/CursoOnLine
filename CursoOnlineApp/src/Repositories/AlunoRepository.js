@@ -1,13 +1,13 @@
 import Repository from "./Repository";
 
-const resource = "/Curso";
+const resource = "/Aluno";
 export default {
   get() {
     return Repository.get(`${resource}`);
   },
 
-  getCurso(cursoId) {
-    return Repository.get(`${resource}/${cursoId}`);
+  getAluno(alunoId) {
+    return Repository.get(`${resource}/${alunoId}`);
   },
 
   create(payload) {
