@@ -13,7 +13,7 @@ namespace CursoOnline.Api.Controllers
 {
     
     [ApiController]
-    [Route("v1/Curso")]
+    [Route("api/v1/Curso")]
     [Authorize]
     public class CursoController : ControllerBase
     {

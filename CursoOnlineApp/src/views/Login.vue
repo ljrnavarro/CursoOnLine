@@ -22,13 +22,15 @@
                     :placeholder="autofilled ? ' ' : ''"
                   ></v-text-field>
                   <v-text-field
-                   @animationstart="checkAnimation"
+                    @animationstart="checkAnimation"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     v-model="senha"
                     label="Senha"
                     name="senha"
                     outlined
                     prepend-icon="lock"
-                    type="password"
+                    @click:append="showPassword = !showPassword"
+                    :type="showPassword ? 'text' : 'password'"
                     :placeholder="autofilled ? ' ' : ''"
                   >
                   </v-text-field>
@@ -38,24 +40,33 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   color="secondary"
+                  @click="recoverAcount"
+                  :loading="loadingNovaConta"
+                  :disabled="loadingNovaConta"
+                  small
+                >
+                  <v-icon left dark>mdi-lock-reset</v-icon>
+                  Recuperar senha
+                </v-btn>
+                <v-btn
+                  small
+                  color="warning"
                   @click="newAcount"
                   :loading="loadingNovaConta"
                   :disabled="loadingNovaConta"
                   to="/registrar"
                 >
-                  Crie uma Conta</v-btn
+                  <v-icon left dark>mdi-account-plus</v-icon>
+                  nova Conta
+                  </v-btn
                 >
                 <v-btn
+                  small
                   color="primary"
                   :loading="loadingLogin"
-                  :disabled="loadingLogin"
                   @click="login"
                 >
-                  <template v-slot:loader>
-                    <span class="custom-loader">
-                      <v-icon light>cached</v-icon>
-                    </span>
-                  </template>
+                  <v-icon left dark>mdi-login-variant</v-icon>
                   Login
                 </v-btn>
               </v-card-actions>
@@ -76,20 +87,19 @@ export default {
   name: "login",
   data() {
     return {
+      showPassword: false,
       email: "",
       senha: "",
       loadingLogin: false,
       loadingNovaConta: false,
       loader: null,
-      autofilled: false
+      autofilled: false,
     };
   },
   props: {
     source: String,
   },
-  mounted() {
-
-  },
+  mounted() {},
   methods: {
     checkAnimation(e) {
       if (e.animationName == "onAutoFillStart") {

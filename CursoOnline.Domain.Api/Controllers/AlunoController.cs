@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CursoOnline.Api.Controllers
 {
     [ApiController]
-    [Route("v1/Aluno")]
+    [Route("api/v1/Aluno")]
     [Authorize]
     public class AlunoController : ControllerBase
     {
@@ -36,7 +36,7 @@ namespace CursoOnline.Api.Controllers
         )
         {
             //Gravando o usuário token da google
-            command.RefUser = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+           // command.RefUser = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
             return (CommandResult)handler.Handle(command);
         }
 

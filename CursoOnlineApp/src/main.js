@@ -10,8 +10,8 @@ import 'sweetalert2/dist/sweetalert2.min.css';
 import "vue2-animate/dist/vue2-animate.min.css";
 import Vuex from 'vuex';
 import store  from "./store/store"
-//import VueTheMask from "vue-the-mask"
 import 'vuetify/dist/vuetify.css';
+import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
 
 
 Vue.use(Vuex);
@@ -38,6 +38,9 @@ firebase.auth().onAuthStateChanged(function () {
 
   if (!app) {
     app = new Vue({
+      icons: {
+        iconfont: 'fa',
+      },
       store,
       router,
       vuetify,
