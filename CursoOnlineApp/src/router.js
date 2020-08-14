@@ -4,6 +4,7 @@ import firebase from "firebase";
 import Login from "./views/Login";
 import AppLayout from "./Layouts/AppLayout";
 import NovaConta from "./views/NovaConta";
+import DadosConta from "./views/DadosConta";
 import Cartao from "./components/Cartao/Cartao";
 import Sobre from "./views/Sobre";
 import Curso from "./views/Curso";
@@ -42,6 +43,14 @@ const router = new Router({
       component: NovaConta,
       meta: {
         baseLayout: true,
+      },
+    },
+    {
+      path: "/DadosConta",
+      name: "DadosConta",
+      component: DadosConta,
+      meta: {
+        requiresAuth: true,
       },
     },
     {

@@ -22,7 +22,7 @@
       <v-divider></v-divider>
 
       <v-list dense>
-        <v-list-item to="/MeusDados" link>
+        <v-list-item to="/DadosConta" link>
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>

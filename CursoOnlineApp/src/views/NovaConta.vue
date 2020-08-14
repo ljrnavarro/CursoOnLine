@@ -14,7 +14,9 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="error" to="/registrar">Cancelar</v-btn>
+                <v-btn color="error" to="/login">
+                <v-icon left dark>cancel</v-icon>
+                Cancelar</v-btn>
                 <v-btn
                   color="primary"
                   @click="registreNewAlunoAcount"
@@ -26,6 +28,7 @@
                       <v-icon light>cached</v-icon>
                     </span>
                   </template>
+                   <v-icon left dark>fas fa-save</v-icon>
                   Salvar
                 </v-btn>
               </v-card-actions>

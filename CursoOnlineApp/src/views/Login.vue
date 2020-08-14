@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" class="loginForm">
     <v-content>
       <v-container class="fill-height" fluid>
         <v-row align="center" justify="center">
@@ -9,24 +9,28 @@
                 <v-toolbar-title>Efetue o Login</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
-              <v-card-text>
-                <v-form class="login">
+              <v-card-text ref="card" >
+                <v-form class="login" ref="form">
                   <v-text-field
                     @animationstart="checkAnimation"
                     v-model="email"
                     outlined
                     label="Email"
                     name="email"
+                    ref="email"
+                    id="ipEmail"
                     prepend-icon="person"
                     type="text"
                     :placeholder="autofilled ? ' ' : ''"
                   ></v-text-field>
+                  <input type="password" name="senha" id="password_fake" class="hidden" autocomplete="off" style="display: none;">
                   <v-text-field
                     @animationstart="checkAnimation"
                     :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                     v-model="senha"
                     label="Senha"
                     name="senha"
+                    ref="senha"
                     outlined
                     prepend-icon="lock"
                     @click:append="showPassword = !showPassword"
@@ -40,9 +44,9 @@
                 <v-spacer></v-spacer>
                 <v-btn
                   color="secondary"
-                  @click="recoverAcount"
-                  :loading="loadingNovaConta"
-                  :disabled="loadingNovaConta"
+                  @click="showDialogRetrievePasswd"
+                  :loading="loadingRetrievePasswd"
+                  :disabled="loadingRetrievePasswd"
                   small
                 >
                   <v-icon left dark>mdi-lock-reset</v-icon>
@@ -58,8 +62,7 @@
                 >
                   <v-icon left dark>mdi-account-plus</v-icon>
                   nova Conta
-                  </v-btn
-                >
+                </v-btn>
                 <v-btn
                   small
                   color="primary"
@@ -92,6 +95,7 @@ export default {
       senha: "",
       loadingLogin: false,
       loadingNovaConta: false,
+      loadingRetrievePasswd: false,
       loader: null,
       autofilled: false,
     };
@@ -99,7 +103,11 @@ export default {
   props: {
     source: String,
   },
-  mounted() {},
+  mounted() {
+    this.$nextTick(function() {
+      console.log("upodated");
+    });
+  },
   methods: {
     checkAnimation(e) {
       if (e.animationName == "onAutoFillStart") {
@@ -120,6 +128,9 @@ export default {
     },
     login: async function() {
       this.loadingLogin = true;
+
+      firebase.auth().languageCode = "pt";
+
       await firebase
         .auth()
         .signInWithEmailAndPassword(this.email, this.senha)
@@ -140,12 +151,13 @@ export default {
             });
             this.$router.replace("/AppLayout");
           },
-          (err) => {
+          () => {
             this.loadingLogin = false;
             this.$swal({
               icon: "error",
               title: "Oops...",
-              text: "Não foi possível efetivar seu login. " + err.message,
+              text:
+                "Não foi possível efetivar seu login. Verifique email/senha",
               showClass: {
                 popup: "animated fadeInDown",
               },
@@ -156,6 +168,76 @@ export default {
           }
         );
     },
+    showDialogRetrievePasswd: function() {
+      this.loadingRetrievePasswd = true;
+      this.$swal({
+        title: "Recuperação de Senha",
+        text: "Confirma a solicitação de recuperação de senha de acesso?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim",
+        cancelButtonText: "Cancelar",
+      }).then((result) => {
+        if (result.value) {
+          this.retrievePasswd(this);
+        }
+      });
+    },
+    retrievePasswd: function(Vue) {
+      if (Vue.email == "" || Vue.email == undefined) {
+        Vue.$swal({
+          icon: "error",
+          title: "Oops...",
+          text: "Email necessário",
+          showClass: {
+            popup: "animated fadeInDown",
+          },
+          hideClass: {
+            popup: "animated fadeOutUp",
+          },
+        });
+        Vue.loadingRetrievePasswd = false;
+        return;
+      } else {
+        var auth = firebase.auth();
+        firebase.auth().useDeviceLanguage();
+        var emailAddress = Vue.email;
+        auth
+          .sendPasswordResetEmail(emailAddress)
+          .then(function() {
+            Vue.$swal({
+              icon: "success",
+              title: "Email enviado",
+              text:
+                "Verifique sua caixa de email com instruções para recuperação de seu acesso.",
+              showClass: {
+                popup: "animated fadeInDown",
+              },
+              hideClass: {
+                popup: "animated fadeOutUp",
+              },
+            });
+            Vue.loadingRetrievePasswd = false;
+          })
+          .catch(function(erro) {
+            console.log("err", erro);
+            Vue.$swal({
+              icon: "error",
+              title: "Email não enviado",
+              text: "Entre em contato com o suporte do sistema.",
+              showClass: {
+                popup: "animated fadeInDown",
+              },
+              hideClass: {
+                popup: "animated fadeOutUp",
+              },
+            });
+            Vue.loadingRetrievePasswd = false;
+          });
+      }
+    },
     newAcount: function() {
       this.$router.replace("/NovaConta");
     },
@@ -164,6 +246,11 @@ export default {
 </script>
 
 <style>
+[v-cloak] {
+    display: none !important;
+}
+
+
 .login {
   margin-top: 40px;
 }
@@ -202,11 +289,11 @@ p a {
   padding-bottom: 250px !important;
 }
 
-input:-webkit-autofill {
+.loginForm :-webkit-autofill {
   animation-name: onAutoFillStart;
 }
 
-input:not(:-webkit-autofill) {
+.loginForm :not(:-webkit-autofill) {
   animation-name: onAutoFillCancel;
 }
 
