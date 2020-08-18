@@ -59,7 +59,7 @@ namespace CursoOnline.Api.Controllers
         /// </summary>
         /// <param name="user">usuário ID da Google</param>
         /// <param name="repository">repositório de pesquisa</param>
-        [Route("/{user}")]
+        [Route("{user}")]
         [HttpGet]
         public Aluno GetAllByUser(string user,
             [FromServices]IAlunoRepository repository
