@@ -53,19 +53,29 @@ export default {
       loadingLogin: false,
       loadingNovaConta: false,
       loader: null,
+      dadosAlunoConta: null
     };
   },
   props: {
     source: String,
   },
   mounted() {
-    console.log("usuario", this.$store.state.user);
-      // this.isLoading = true;
-      const { data } = await AlunoRepository.get();
-      this.cards = data;
-      this.isLoading = false;
+    this.$refs.dadosAluno.alterDataMode = true;
+    this.getUser();
+    console.log("dados aluno conta", this.dadosAlunoConta);
+   // this.$refs.dadosAluno.email = this.dadosAlunoConta.email;
   },
   methods: {
+    async getUser() {
+      await (async () => {
+        this.dadosAlunoConta = await AlunoRepository.getAluno(this.$store.state.user.uid);
+        this.$refs.dadosAluno.email = this.dadosAlunoConta.data.email;
+        this.$refs.dadosAluno.dataNascimento = this.dadosAlunoConta.data.nascimento;
+        this.$refs.dadosAluno.cpf = this.dadosAlunoConta.data.cpf;
+        this.$refs.dadosAluno.name = this.dadosAlunoConta.data.nome;
+        console.log(this.dadosAlunoConta);
+      })();
+    },
     async registreNewAlunoAcount() {
       this.loadingNovaConta = true;
       this.$refs.dadosAluno.validate();

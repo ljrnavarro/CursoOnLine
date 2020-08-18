@@ -14,7 +14,9 @@
         </v-list-item-avatar>
 
         <v-list-item-content>
-          <v-list-item-title v-model="userDisplayName">{{this.userDisplayName}}</v-list-item-title>
+          <v-list-item-title v-model="userDisplayName">{{
+            this.userDisplayName 
+          }} <br> {{this.email}}</v-list-item-title>
           <v-list-item-subtitle>conectado</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
@@ -22,6 +24,14 @@
       <v-divider></v-divider>
 
       <v-list dense>
+        <v-list-item @click="showDialogRetrievePasswd">
+          <v-list-item-action>
+            <v-icon>mdi-lock-reset</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Redefinir Senha</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item to="/DadosConta" link>
           <v-list-item-action>
             <v-icon>mdi-home</v-icon>
@@ -50,7 +60,7 @@
       <template>
         <div class="pa-2">
           <v-btn block @click="confirmActionSair">
-           <v-icon left>lock_open</v-icon> Sair
+            <v-icon left>lock_open</v-icon> Sair
           </v-btn>
         </div>
       </template>
@@ -60,28 +70,30 @@
 
 <script>
 // @ is an alias to /src
+import ContaMixins from '../../mixins/ContaMixins'
 import firebase from "firebase";
-//clearimport VueSweetalert2 from "vue-sweetalert2";
-//import "sweetalert2/dist/sweetalert2.min.css";
-//import "vue2-animate/dist/vue2-animate.min.css";
 
 export default {
+  mixins: [ContaMixins],
   props: {
     source: String,
     drawer: Boolean,
   },
   data: () => ({
-    userDisplayName: null
+    userDisplayName: null,
+    email: null
   }),
   updated() {},
   created() {
     //  this.$root.$refs.NavigatorDrawer = this;
   },
   components: {
-   // VueSweetalert2
+    // VueSweetalert2
   },
   mounted() {
-     this.userDisplayName = this.$store.state.user.displayName;
+    this.userDisplayName = this.$store.state.user.displayName;
+    this.email = this.$store.state.user.email;
+   
   },
   events: {},
   methods: {
@@ -96,7 +108,7 @@ export default {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "Sim",
-        cancelButtonText: "Não"
+        cancelButtonText: "Não",
       }).then((result) => {
         if (result.value) {
           this.sair();

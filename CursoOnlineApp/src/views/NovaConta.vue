@@ -14,7 +14,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="error" to="/login">
+                <v-btn color="error" to="/login" small>
                 <v-icon left dark>cancel</v-icon>
                 Cancelar</v-btn>
                 <v-btn
@@ -22,6 +22,7 @@
                   @click="registreNewAlunoAcount"
                   :loading="loadingNovaConta"
                   :disabled="loadingNovaConta"
+                  small
                 >
                   <template v-slot:loader>
                     <span class="custom-loader">

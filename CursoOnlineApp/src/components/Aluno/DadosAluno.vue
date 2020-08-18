@@ -12,7 +12,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6" md="6">
+      <v-col :cols="alterDataMode ? 12 : 6" :md="alterDataMode ? 12 : 6">
         <v-text-field
           v-model="email"
           :rules="[rules.requiredRule, rules.emailRule]"
@@ -20,7 +20,7 @@
           required
         ></v-text-field>
       </v-col>
-      <v-col cols="6" md="6">
+      <v-col cols="6" md="6" v-if="!alterDataMode">
         <v-text-field
           v-model="password"
           :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
@@ -107,6 +107,7 @@ export default {
     select: null,
     checkbox: false,
     menu: false,
+    alterDataMode : false,
     rules: {
       requiredRule: (value) => !!value || "Obrigatório.",
       counterRule: (value) => value.length <= 20 || "Máximo 20 caracteres.",
