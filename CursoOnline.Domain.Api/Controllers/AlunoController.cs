@@ -31,12 +31,12 @@ namespace CursoOnline.Api.Controllers
         [Route("")]
         [HttpPost]
         public CommandResult Create(
-            [FromBody]CreateAlunoCommand command,
-            [FromServices]AlunoHandler handler
+            [FromBody] CreateAlunoCommand command,
+            [FromServices] AlunoHandler handler
         )
         {
             //Gravando o usuário token da google
-           // command.RefUser = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
+            command.RefUser = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
             return (CommandResult)handler.Handle(command);
         }
 
@@ -47,7 +47,7 @@ namespace CursoOnline.Api.Controllers
         [Route("")]
         [HttpGet]
         public IEnumerable<Aluno> GetAll(
-            [FromServices]IAlunoRepository repository
+            [FromServices] IAlunoRepository repository
         )
         {
             var user = User.Claims.FirstOrDefault(x => x.Type == "user_id")?.Value;
@@ -62,10 +62,27 @@ namespace CursoOnline.Api.Controllers
         [Route("{user}")]
         [HttpGet]
         public Aluno GetAllByUser(string user,
-            [FromServices]IAlunoRepository repository
+            [FromServices] IAlunoRepository repository
         )
         {
             return repository.GetByUser(user);
+        }
+
+
+        /// <summary>
+        /// Atualiza dados da conta do aluno
+        /// </summary>
+        /// <param name="command"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>         
+        [Route("")]
+        [HttpPut]
+        public CommandResult Update(
+            [FromBody] UpdateAlunoCommand command,
+            [FromServices] AlunoHandler handler
+        )
+        {
+            return (CommandResult)handler.Handle(command);
         }
     }
 }

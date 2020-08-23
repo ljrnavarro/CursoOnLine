@@ -10,7 +10,8 @@ namespace CursoOnline.Domain.Handlers
 {
     public class AlunoHandler :
         Notifiable,
-        IHandler<CreateAlunoCommand>
+        IHandler<CreateAlunoCommand>,
+        IHandler<UpdateAlunoCommand>
     {
         private readonly IAlunoRepository _repository;
         public AlunoHandler(IAlunoRepository repository)
@@ -35,6 +36,25 @@ namespace CursoOnline.Domain.Handlers
             _repository.Create(aluno);
             
             return new CommandResult(true, "Aluno salvo com sucesso!", aluno);
+        }
+
+        public ICommandResult Handle(UpdateAlunoCommand command)
+        {
+            command.Validate();
+            if (command.Invalid)
+                return new CommandResult(false, "Erro na atualização do aluno!", command.Notifications);
+
+            // Recupera a conta
+            var aluno = _repository.GetByUser(command.RefUser);
+            aluno.CPF = command.CPF;
+            aluno.Email = command.Email;
+            aluno.Nascimento = command.Nascimento;
+            aluno.Nome = command.Nome;
+            aluno.RefUser =  command.RefUser;
+
+            _repository.Update(aluno);
+            
+            return new CommandResult(true, "Aluno atualizado com sucesso!", aluno);
         }
     }
 }

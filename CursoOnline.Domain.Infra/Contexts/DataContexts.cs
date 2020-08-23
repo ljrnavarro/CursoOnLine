@@ -28,7 +28,6 @@ namespace CursoOnline.Domain.Infra.Contexts
         {
             modelBuilder.Entity<Aluno>().ToTable("Aluno");
             modelBuilder.Entity<Aluno>().Property(x => x.Id).ValueGeneratedOnAdd();
-            modelBuilder.Entity<Aluno>().Property(x => x.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Aluno>().HasKey(x => x.Id);
             modelBuilder.Entity<Aluno>().Property(x => x.CPF).HasColumnType("vachar(11)");
             modelBuilder.Entity<Aluno>().Property(x => x.Email).HasColumnType("vachar(200)");
