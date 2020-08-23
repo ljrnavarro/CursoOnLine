@@ -75,8 +75,6 @@ export default {
         RefUser: "",
       };
 
-      console.log("newAccount", newAlunoAcount);
-
       firebase
         .auth()
         .createUserWithEmailAndPassword(
@@ -116,8 +114,6 @@ export default {
             this.loadingNovaConta = false;
           }
         );
-      //      const { data } = await AlunoRepository.create(newAlunoAcount);
-      //    console.log("newaluno", data)
       this.isLoading = false;
     },
   },

@@ -12,5 +12,9 @@ export default {
 
   create(payload) {
     return Repository.post(`${resource}`, payload);
+  },
+
+  update(payload) {
+    return Repository.put(`${resource}`, payload);
   }
 };

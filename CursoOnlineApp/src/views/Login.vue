@@ -130,7 +130,6 @@ export default {
     },
     login: async function() {
       this.loadingLogin = true;
-
       firebase.auth().languageCode = "pt";
 
       await firebase
@@ -138,35 +137,13 @@ export default {
         .signInWithEmailAndPassword(this.email, this.senha)
         .then(
           async () => {
-            this.loadingLogin = false;
             await this.fetchToken();
-            this.$swal({
-              icon: "success",
-              title: "Login Efetuado com Sucesso",
-              text: "Seja bem vindo " + this.email,
-              showClass: {
-                popup: "animated fadeInDown",
-              },
-              hideClass: {
-                popup: "animated fadeOutUp",
-              },
-            });
-            this.$router.replace("/AppLayout");
+            this.showMessage(this.messageType.SUCCESS, "Login efetuado com sucesso!", "Seja bem vindo " + this.email, "AppLayout");
+            this.loadingLogin = false;
           },
           () => {
             this.loadingLogin = false;
-            this.$swal({
-              icon: "error",
-              title: "Oops...",
-              text:
-                "Não foi possível efetivar seu login. Verifique email/senha",
-              showClass: {
-                popup: "animated fadeInDown",
-              },
-              hideClass: {
-                popup: "animated fadeOutUp",
-              },
-            });
+            this.showMessage(this.messageType.ERROR, "Oops...Aconteceu algum problema!", "Não foi possível efetivar seu login. Verifique email/senha",null);
           }
         );
     },

@@ -12,15 +12,15 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="error" to="/Curso">
+            <v-btn color="error">
               <v-icon left dark>cancel</v-icon>
               Cancelar</v-btn
             >
             <v-btn
               color="primary"
-              @click="registreNewAlunoAcount"
-              :loading="loadingNovaConta"
-              :disabled="loadingNovaConta"
+              @click="updateAcount"
+              :loading="loadingUpdateAcount"
+              :disabled="loadingUpdateAcount"
             >
               <template v-slot:loader>
                 <span class="custom-loader">
@@ -28,7 +28,7 @@
                 </span>
               </template>
               <v-icon left dark>fas fa-save</v-icon>
-              Salvar
+              Alterar
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -41,6 +41,7 @@
 import DadosAluno from "../components/Aluno/DadosAluno";
 import firebase from "firebase";
 import { RepositoryFactory } from "./../Repositories/RepositoryFactory";
+//import MessageBoxMixins from './../mixins/MessageBoxMixins.js';
 const AlunoRepository = RepositoryFactory.get("aluno");
 
 export default {
@@ -48,89 +49,60 @@ export default {
   components: {
     DadosAluno,
   },
-  data() {
-    return {
-      loadingLogin: false,
-      loadingNovaConta: false,
+ // mixins:[MessageBoxMixins],
+  data: () => ({
+      loadingUpdateAcount: false,
       loader: null,
-      dadosAlunoConta: null
-    };
-  },
+      dadosAlunoConta: null,
+  }),
   props: {
     source: String,
   },
   mounted() {
     this.$refs.dadosAluno.alterDataMode = true;
     this.getUser();
-    console.log("dados aluno conta", this.dadosAlunoConta);
-   // this.$refs.dadosAluno.email = this.dadosAlunoConta.email;
   },
   methods: {
     async getUser() {
       await (async () => {
-        this.dadosAlunoConta = await AlunoRepository.getAluno(this.$store.state.user.uid);
+        this.dadosAlunoConta = await AlunoRepository.getAluno(
+          this.$store.state.user.uid
+        );
         this.$refs.dadosAluno.email = this.dadosAlunoConta.data.email;
         this.$refs.dadosAluno.dataNascimento = this.dadosAlunoConta.data.nascimento;
         this.$refs.dadosAluno.cpf = this.dadosAlunoConta.data.cpf;
         this.$refs.dadosAluno.name = this.dadosAlunoConta.data.nome;
-        console.log(this.dadosAlunoConta);
       })();
     },
-    async registreNewAlunoAcount() {
-      this.loadingNovaConta = true;
+    async updateAcount() {
+      this.loadingUpdateAcount = true;
       this.$refs.dadosAluno.validate();
-      var newAlunoAcount = {
+      var UpdateAlunoAcount = {
         Nome: this.$refs.dadosAluno.name,
         Email: this.$refs.dadosAluno.email,
         CPF: this.$refs.dadosAluno.unmaskedCpf,
         Nascimento: this.$refs.dadosAluno.dataNascimento,
-        RefUser: "",
+        RefUser: this.$store.state.user.uid,
+        id: this.dadosAlunoConta.Id,
       };
+      var user = firebase.auth().currentUser;
+      user.updateEmail(this.$refs.dadosAluno.email).then(async () => {
+        //atualizando no banco de dados
+        try {
+          await AlunoRepository.update(UpdateAlunoAcount);
+        } catch (Error) {
+          console.log("erro", Error);
+          this.showMessage(this.messageType.ERROR, "Dados não atualizados", "Contate o suporte.", null);
+          this.loadingUpdateAcount = false;
 
-      console.log("newAccount", newAlunoAcount);
-
-      firebase
-        .auth()
-        .createUserWithEmailAndPassword(
-          newAlunoAcount.Email,
-          this.$refs.dadosAluno.password
-        )
-        .then(
-          async (user) => {
-            //Cadastrando no banco, após gravar no firebase e capturar o UID
-            await (async () => {
-              newAlunoAcount.RefUser = user.user.uid;
-              await AlunoRepository.create(newAlunoAcount);
-
-              this.$swal({
-                icon: "success",
-                title: "Nova conta cadastrada com Sucesso",
-                text:
-                  "Seja bem vindo(a) " +
-                  newAlunoAcount.Nome +
-                  " você será redirecionado ao login.",
-                showClass: {
-                  popup: "animated fadeInDown",
-                },
-                hideClass: {
-                  popup: "animated fadeOutUp",
-                },
-                onClose: () => {
-                  this.$router.replace("Login");
-                },
-              });
-            })();
-
-            this.loadingNovaConta = false;
-          },
-          (err) => {
-            alert("Aconteceu algo inesperado. " + err.message);
-            this.loadingNovaConta = false;
-          }
-        );
-      //      const { data } = await AlunoRepository.create(newAlunoAcount);
-      //    console.log("newaluno", data)
-      this.isLoading = false;
+          //Voltando o email
+          user.updateEmail(this.dadosAlunoConta.data.email).then(async () => {})
+          return;
+        }
+        this.showMessage(this.messageType.SUCCESS, "Dados Atualizados",
+           "Dados atualizados.Você será redirecionado ao login.", "Login");
+              this.loadingUpdateAcount = false;
+      });
     },
   },
 };
