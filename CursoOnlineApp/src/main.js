@@ -11,24 +11,25 @@ import "vue2-animate/dist/vue2-animate.min.css";
 import Vuex from 'vuex';
 import store  from "./store/store"
 import 'vuetify/dist/vuetify.css';
-import '@fortawesome/fontawesome-free/css/all.css' // Ensure you are using css-loader
+import '@fortawesome/fontawesome-free/css/all.css'
+import MessageBoxMixins from './../src/mixins/MessageBoxMixins.js'
 
 
 Vue.use(Vuex);
 Vue.use(VueResource);
 Vue.use(VueSweetalert2);
-//Vue.use(VueTheMask ,{ masked : false });
 Vue.use(Vuetify)
+Vue.mixin(MessageBoxMixins);
 
 // Initialize Firebase
 var config = {
-  apiKey: "xxxxxxxxxxx",
-  authDomain: "xxxxxxxxxxxx",
-  databaseURL: "xxxxxxxxxxxx",
-  projectId: "xxxxxxxxxxxx",
-  storageBucket: "xxxxxxxxxxxxxm",
-  messagingSenderId: "xxxxxxxxxxxxxx",
-  appId: "1:xxxxxxxxxxxxxxxxxxxx"
+  apiKey: "xxxxxxxxxx",
+  authDomain: 'wwwwwwwwwwwwwwwwwwwwwwwwww',
+  databaseURL: "xxxxxxxxx",
+  projectId: "xxxxxxxxxxxxxx",
+  storageBucket: "xxxxxxxxxxxxx",
+  messagingSenderId: "xxxxxxxxxxxxxxxxx",
+  appId: "1:xxxxxxxxxxxxxxxxxxxxxx"
 };
 firebase.initializeApp(config);
 
@@ -44,6 +45,7 @@ firebase.auth().onAuthStateChanged(function () {
       store,
       router,
       vuetify,
+      //types,
       template: '<App/>',
       render: h => h(App),
     }).$mount('#app');
