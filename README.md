@@ -48,8 +48,7 @@ outra forma de armazenamento. Está etapa pode ser mockada.
 # Observações
 
   1. Apesar do projeto ter 5 entidades (Aluno, Cartao, Pagamento, Curso e Matrícula) alguns testes foram feitos apenas em 2 entidades pois a ideia é montar a arquitetura , contudo possibilitando de serem implementados os testes para as entidades restantes no futuro;
-  2. Finalizando a API e documentação
-  3. Restando o Front-End
-  4. SQL sob docker
+  2. Front End - sendo construído em Vue
+  3. SQL sob docker
 
 
