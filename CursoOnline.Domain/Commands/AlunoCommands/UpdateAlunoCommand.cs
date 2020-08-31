@@ -15,10 +15,10 @@ namespace CursoOnline.Domain.Commands.AlunoCommands
         public string RefUser { get; set; }
         public UpdateAlunoCommand() { }
 
-         public UpdateAlunoCommand(string nome, string cPF, DateTime nascimento,string email, string refUser)
+         public UpdateAlunoCommand(string nome, string cpf, DateTime nascimento,string email, string refUser)
          {
                 this.Nome = nome;
-                this.CPF = CPF;
+                this.CPF = cpf;
                 this.Nascimento = nascimento;
                 this.Email = email;
                 this.RefUser = refUser;

@@ -23,7 +23,7 @@ namespace CursoOnline.Domain.Handlers
             command.Validate();
             if (command.Invalid)
                 return new CommandResult(false, "Erro na criação do aluno!", command.Notifications);
-            
+
             var aluno = new Aluno()
             {
                 Nome = command.Nome,
@@ -34,7 +34,7 @@ namespace CursoOnline.Domain.Handlers
             };
 
             _repository.Create(aluno);
-            
+
             return new CommandResult(true, "Aluno salvo com sucesso!", aluno);
         }
 
@@ -50,10 +50,10 @@ namespace CursoOnline.Domain.Handlers
             aluno.Email = command.Email;
             aluno.Nascimento = command.Nascimento;
             aluno.Nome = command.Nome;
-            aluno.RefUser =  command.RefUser;
+            aluno.RefUser = command.RefUser;
 
             _repository.Update(aluno);
-            
+
             return new CommandResult(true, "Aluno atualizado com sucesso!", aluno);
         }
     }
